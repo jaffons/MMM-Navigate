@@ -36,8 +36,8 @@ module.exports = NodeHelper.create({
 		var self = this;
 
 		console.log('MMM-Navigate, listen on GPIO PINs (BCM): '+self.config.GPIOPins[0]+','+self.config.GPIOPins[1]+','+self.config.GPIOPins[2]);
-		const A = new Gpio(self.config.GPIOPins[0], 'in', 'both',{debounceTimeout : 50 }) //BCM Pin 26
-		const B = new Gpio(self.config.GPIOPins[1], 'in', 'both',{debounceTimeout : 50 }) //BCM Pin 20
+		const A = new Gpio(self.config.GPIOPins[0], 'in', 'both',{debounceTimeout : 20 }) //BCM Pin 26
+		const B = new Gpio(self.config.GPIOPins[1], 'in', 'both',{debounceTimeout : 20 }) //BCM Pin 20
 		const C = new Gpio(self.config.GPIOPins[2], 'in', 'both',{debounceTimeout : 20 }) //BCM Pin 19
 
 		A.watch(function (err, value) {
