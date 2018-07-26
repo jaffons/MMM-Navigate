@@ -7,7 +7,7 @@ var test_counter = 0;
 Module.register("MMM-Navigate",{
 	// Default module config.
 	defaults: {
-		Alias: [ 'Seite vorwärts','Seite zurück'],
+		Alias: [ 'Page increment','Page decrement'],
 		Action: [{type: "notification", title: 'Good morning!'},{type: "notification", title: 'Good morning!'}],
 		GPIOPins: [26,20,19]//rotary cw, rotary ccw, rotary press (BCM Numbering)
 	},
@@ -105,7 +105,6 @@ Module.register("MMM-Navigate",{
 	naviaction: function(payload){
 		var self = this;
 		var selectedid = '';
-		var test = '';
 
 
 		if(payload.inputtype === 'PRESSED'){
@@ -116,18 +115,16 @@ Module.register("MMM-Navigate",{
 				if(Array.isArray(self.config.Action[selectedid])){//if selected entry Action is array - lock it
 					locked = true;
 					document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected locked');
-					//console.log('Alex: locked setzen.');
 				}
 				else{//if selected entry Action is object - so there is nothing to lock - execute it
 							self.show(0,{force: true}); 
-							//console.log('Alex, Payload: ', self.config.Action[selectedid].notification,' xxx ',self.config.Action[selectedid].payload);
 							self.sendAction(self.config.Action[selectedid]);
 				}
 			}
 			else{ //Menu locked so unlock it
 				locked = false;
 				document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
-				//console.log('Alex: locked auf false setzen setzen. Selectedid: ',selectedid);
+				self.sendAction(self.config.Action[selectedid]);
 			}
 		}	 
 		else if (payload.inputtype === 'CW' || payload.inputtype === 'CCW'){
@@ -165,23 +162,21 @@ Module.register("MMM-Navigate",{
 			}
 			else { //Menu locked so execute first or second payload of array (depending on CW or CCW)
 				if(payload.inputtype === 'CW') {
-					test_counter++;
-					self.sendAction(self.config.Action[selectedid][0]);
+					adjustable_counter++;
+//					self.sendAction(self.config.Action[selectedid][0]);
 				}
 				else if(payload.inputtype === 'CCW') {
-					test_counter--;
-					self.sendAction(self.config.Action[selectedid][1]);
+					adjustable_counter--;
+//					self.sendAction(self.config.Action[selectedid][1]);
 				}
-//				this.config.Alias[0] = String(test_counter);
-				console.log("test counter: " + test_counter + ", selectedID: " + selectedid);
+
+//				console.log("adjustable counter: " + adjustable_counter + ", selectedID: " + selectedid);
 				document.getElementsByTagName('li')[selectedid].innerHTML = String(test_counter);
-//				document.getElementsByTagName(selectedid).innerHTML = String(test_counter);
-// 				this.updateDom(300);
 			}
-			
+
 		}
 
-			
+
 		function fselectedid(){//get ID and return it
 			for (let index = 0; index < self.config.Action.length; index++) {
 				var test = document.getElementsByTagName('li')[index].getAttribute('class');
@@ -198,18 +193,8 @@ Module.register("MMM-Navigate",{
 
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
-	/*	if(notification === "{{MODULE_NAME}}-NOTIFICATION_TEST") {
-			// set dataNotification
-			console.log('Rotary info "IF"');
-			this.dataNotification = payload;
-			this.updateDom(300);
-			}*/
-		
-				console.log('Rotary Info "ELSE"');
+				console.log(this.name +' received notification: ' + notification);
 				this.naviaction(payload);
-			
-
-//		this.updateDom(300);
 	},
 	
 });
