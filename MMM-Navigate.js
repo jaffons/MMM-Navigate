@@ -2,7 +2,18 @@
 
 var locked = false;
 var confirm = 0;
-var test_counter = 0;
+var adjustable_counter = 0;
+
+var alarmSet = {
+		alarmIdx:'0',
+                adj_hour:'12',
+                adj_minute:'59',
+                adj_days:[0,1,2,3,4,5,6],
+};
+
+var A1 = new Object();
+var A2 = new Object();
+
 
 Module.register("MMM-Navigate",{
 	// Default module config.
@@ -71,7 +82,7 @@ Module.register("MMM-Navigate",{
 		}
 
 		var self = this;//makes variables usable in functions
-	
+
 		//Div after loading
 		var parent = document.createElement("div");
 		parent.className = "xsmall bright";
@@ -101,7 +112,7 @@ Module.register("MMM-Navigate",{
 		});
 	},
 
-
+			
 	naviaction: function(payload){
 		var self = this;
 		var selectedid = '';
@@ -124,7 +135,7 @@ Module.register("MMM-Navigate",{
 			else{ //Menu locked so unlock it
 				locked = false;
 				document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
-				self.sendAction(self.config.Action[selectedid]);
+				self.sendAction(self.config.Action[1]);
 			}
 		}	 
 		else if (payload.inputtype === 'CW' || payload.inputtype === 'CCW'){
@@ -163,15 +174,15 @@ Module.register("MMM-Navigate",{
 			else { //Menu locked so execute first or second payload of array (depending on CW or CCW)
 				if(payload.inputtype === 'CW') {
 					adjustable_counter++;
-//					self.sendAction(self.config.Action[selectedid][0]);
+					self.sendAction(self.config.Action[selectedid][0]);
 				}
 				else if(payload.inputtype === 'CCW') {
 					adjustable_counter--;
-//					self.sendAction(self.config.Action[selectedid][1]);
+					self.sendAction(self.config.Action[selectedid][1]);
 				}
 
 //				console.log("adjustable counter: " + adjustable_counter + ", selectedID: " + selectedid);
-				document.getElementsByTagName('li')[selectedid].innerHTML = String(test_counter);
+				document.getElementsByTagName('li')[selectedid].innerHTML = String(adjustable_counter);
 			}
 
 		}
@@ -187,7 +198,7 @@ Module.register("MMM-Navigate",{
 			}
 			return selectedid;
 		}
-		return parent
+ 		return parent
 	},
 
 
