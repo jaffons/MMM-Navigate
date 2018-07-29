@@ -2,7 +2,7 @@
 
 var locked = false;
 var confirm = 0;
-var selectedAlarm = '';
+var selectedAlarm = 0;
 
 class Alarm {
 	constructor(hour, min, days) {
@@ -13,8 +13,8 @@ class Alarm {
 }
 
 let alarmIdx = [
-	new Alarm(12,59, [0,1]),
-    new Alarm(4,20, [4,5])    
+	new Alarm(6,40, [0,1,2,3,4,5]),
+	new Alarm(4,20, [5,6])
 ];
 
 
@@ -120,12 +120,12 @@ Module.register("MMM-Navigate",{
 		var self = this;
 		var selectedid = '';
 		var adjustable_counter = 0;
+		var showAttr = 0;
 
 		self.show(0);
 		selectedid = fselectedid();
-		
+
 		if(payload.inputtype === 'PRESSED'){
-			
 			if(locked==false){//Menu not locked so ... (see below)
 				if(Array.isArray(self.config.Action[selectedid])){//if selected entry Action is array - lock it
 					locked = true;
@@ -139,7 +139,7 @@ Module.register("MMM-Navigate",{
 			else{ //Menu locked so unlock it
 				locked = false;
 				document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
-				self.sendAction(self.config.Action[1]);
+//				self.sendAction(self.config.Action[1]);
 			}
 		}	 
 		else if (payload.inputtype === 'CW' || payload.inputtype === 'CCW'){
@@ -176,30 +176,40 @@ Module.register("MMM-Navigate",{
 			else { //Menu locked
 				if(payload.inputtype === 'CW') {
 					adjustable_counter++;
-					self.sendAction(self.config.Action[selectedid][0]);
+				//	self.sendAction(self.config.Action[selectedid][0]);
 				}
 				else if(payload.inputtype === 'CCW') {
 					adjustable_counter--;
-					self.sendAction(self.config.Action[selectedid][1]);
+				//	self.sendAction(self.config.Action[selectedid][1]);
 				}
-				
+
 				/* selectedid = 0..lastIdx,
 				*  0 = alarmIdx
 				*  1 = hour
 				*  2 = minute
 				*  3 = days[]
 				*/
-				switch (selectedid) {
+				switch (parseInt(selectedid)) {
 					case 0:
 						selectedAlarm = selectedAlarm + adjustable_counter;
+						showAttr = selectedAlarm;
 						break;
 					case 1:
 						alarmIdx[selectedAlarm].hour = alarmIdx[selectedAlarm].hour + adjustable_counter;
+						showAttr = alarmIdx[selectedAlarm].hour;
 						break;
+					case 2: 
+						alarmIdx[selectedAlarm].minute = alarmIdx[selectedAlarm].minute + adjustable_counter;
+						showAttr = alarmIdx[selectedAlarm].minute;
+						break;
+
+
+					default:
+						showAttr = 1;
+						console.log("DEFAULT:: show attr: " + showAttr + ", selectedID: " + selectedid);
 				};
 
-//				console.log("adjustable counter: " + adjustable_counter + ", selectedID: " + selectedid);
-				document.getElementsByTagName('li')[selectedid].innerHTML = self.config.Alias + String(adjustable_counter);
+				document.getElementsByTagName('li')[selectedid].innerHTML = this.config.Alias[selectedid] + showAttr;
 			}
 
 		}
