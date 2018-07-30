@@ -3,6 +3,7 @@
 var locked = false;
 var confirm = 0;
 var selectedAlarm = 0;
+var selectedDay = 0;
 
 class Alarm {
 	constructor(hour, min, days) {
@@ -121,6 +122,7 @@ Module.register("MMM-Navigate",{
 		var selectedid = '';
 		var adjustable_counter = 0;
 		var showAttr = 0;
+		var dayStr["su","mo","tu","wd","th","fr","st"];
 
 		self.show(0);
 		selectedid = fselectedid();
@@ -192,16 +194,22 @@ Module.register("MMM-Navigate",{
 				switch (parseInt(selectedid)) {
 					case 0:
 						selectedAlarm = selectedAlarm + adjustable_counter;
+						selectedAlarm = limits(selectedAlarm, 0, 2);
 						showAttr = selectedAlarm;
 						break;
 					case 1:
 						alarmIdx[selectedAlarm].hour = alarmIdx[selectedAlarm].hour + adjustable_counter;
+						alarmIdx[selectedAlarm].hour = limits(alarmIdx[selectedAlarm].hour, 0, 23);
 						showAttr = alarmIdx[selectedAlarm].hour;
 						break;
 					case 2: 
 						alarmIdx[selectedAlarm].minute = alarmIdx[selectedAlarm].minute + adjustable_counter;
+						alarmIdx[selectedAlarm].minute = limits(alarmIdx[selectedAlarm].minute, 0, 59);
 						showAttr = alarmIdx[selectedAlarm].minute;
 						break;
+					case 3:
+						selectedDay = selectedDay + adjustable_counter;
+						selectedDay = limits(selectedDay, 0, 6);
 
 
 					default:
@@ -225,6 +233,15 @@ Module.register("MMM-Navigate",{
 			}
 			return selectedid;
 		}
+			
+		function limits(input, min_limit, max_limit) {
+			var input; var min_limit; var max_limit;
+			if(input < min_limit) {input = max_limit;}
+			if(input > max_limit) {input = min_limit;}
+			return input;
+		}
+		
+		
  		return parent
 	},
 
