@@ -1,30 +1,48 @@
-//MMM-Navigate.js:
+/*MMM-Navigate.js
 
-var locked = false;
-var confirm = 0;
-var selectedAlarm = 0;
-var selectedDay = 0;
+* Magic Mirror
+* Module: NewsFeed
+*
+* https://github.com/jaffons/MMM-Navigate
+* MIT Licensed.
 
-class Alarm {
-	constructor(hour, min, days) {
-		this.hour = hour;
-		this.minute = min;
-		this.days = days;
-	}
-}
+*/
 
-let alarmIdx = [
-	new Alarm(6,40, [1,2,3,4,5]),
-	new Alarm(4,20, [0,6])
-];
 
+// not commited ******************************************************
 
 Module.register("MMM-Navigate",{
+	
+	var locked = false;
+	var confirm = 0;
+	var selectedAlarm = 0;
+	var selectedDay = 0;
+
+	class Alarm {
+		constructor(hour, min, days) {
+			this.hour = hour;
+			this.minute = min;
+			this.days = days;
+		}
+	}
+
+	let alarmIdx = [
+		new Alarm(6,40, [1,2,3,4,5]),
+		new Alarm(4,20, [0,6])
+	];
+	
+
+	
 	// Default module config.
 	defaults: {
 		Alias: [ 'Page increment','Page decrement'],
 		Action: [{type: "notification", title: 'Good morning!'},{type: "notification", title: 'Good morning!'}],
 		GPIOPins: [26,20,19]//rotary cw, rotary ccw, rotary press (BCM Numbering)
+	},
+	
+	// Define required scripts.
+	getScripts: function() {
+		return ["moment.js"];
 	},
 
 	getStyles: function() {
@@ -53,9 +71,16 @@ Module.register("MMM-Navigate",{
 		this.sendConfig();//pass config to node_helper.js
 		//Helper to test connection to node_helper.js
 		//this.sendSocketNotification('START', {message: 'Starte Verbindung node_helper für ' + this.name});
+		setInterval(function() {
+			this.resetLocks();
+		}, 2000);
 		this.hide(30000);
 	},
 
+	resetLocks: function() {
+		locked = false;
+	},
+	
 	//Helper, to use module without Rotary Encoder and without GPIO Pins, like developing in Pixel VM
 /*	notificationReceived: function(notification, payload) {
 		/*if (notification === "HIDE_RADIO") {
@@ -124,7 +149,7 @@ Module.register("MMM-Navigate",{
 		var selectedid = '';
 		var adjustable_counter = 0;
 		var showAttr = 0;
-		var dayStr["su","mo","tu","wd","th","fr","st"];
+		var dayStr = ["su","mo","tu","wd","th","fr","st"];
 
 		self.show(0);
 		selectedid = fselectedid();
@@ -143,7 +168,7 @@ Module.register("MMM-Navigate",{
 			else{ //Menu locked so unlock it
 				if(parseInt(selectedid) == 3) { // hardcoded selection 'days' 
 					// toggle selected day. 
-					if(alarmIdx[selectedAlarm].days[selectedDay]) == 9) {
+					if(alarmIdx[selectedAlarm].days[selectedDay] == 9) {
 						alarmIdx[selectedAlarm].days[selectedDay] = selectedDay;
 					}
 					else { // '9' means that no alarm on that day
