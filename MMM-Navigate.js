@@ -14,8 +14,8 @@ class Alarm {
 }
 
 let alarmIdx = [
-	new Alarm(6,40, [0,1,2,3,4,5]),
-	new Alarm(4,20, [5,6])
+	new Alarm(6,40, [1,2,3,4,5]),
+	new Alarm(4,20, [0,6])
 ];
 
 
@@ -44,7 +44,7 @@ Module.register("MMM-Navigate",{
 			this.sendNotification(description.notification, description.payload);
 		}
 
-		this.hide(30000);
+		this.hide(90000);
 	},
 
 	// Define start sequence.
@@ -53,6 +53,7 @@ Module.register("MMM-Navigate",{
 		this.sendConfig();//pass config to node_helper.js
 		//Helper to test connection to node_helper.js
 		//this.sendSocketNotification('START', {message: 'Starte Verbindung node_helper für ' + this.name});
+		this.hide(30000);
 	},
 
 	//Helper, to use module without Rotary Encoder and without GPIO Pins, like developing in Pixel VM
@@ -107,6 +108,7 @@ Module.register("MMM-Navigate",{
 			naviItem.appendChild(link);
 			parent.appendChild(naviItem);
 		}
+		
 		return parent
 	},
 
@@ -139,8 +141,19 @@ Module.register("MMM-Navigate",{
 				}
 			}
 			else{ //Menu locked so unlock it
-				locked = false;
-				document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
+				if(parseInt(selectedid) == 3) { // hardcoded selection 'days' 
+					// toggle selected day. 
+					if(alarmIdx[selectedAlarm].days[selectedDay]) == 9) {
+						alarmIdx[selectedAlarm].days[selectedDay] = selectedDay;
+					}
+					else { // '9' means that no alarm on that day
+						alarmIdx[selectedAlarm].days[selectedDay] = 9;
+					}
+				}
+				else {
+					locked = false;
+					document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
+				}
 //				self.sendAction(self.config.Action[1]);
 			}
 		}	 
@@ -194,7 +207,7 @@ Module.register("MMM-Navigate",{
 				switch (parseInt(selectedid)) {
 					case 0:
 						selectedAlarm = selectedAlarm + adjustable_counter;
-						selectedAlarm = limits(selectedAlarm, 0, 2);
+						selectedAlarm = limits(selectedAlarm, 0, 1);
 						showAttr = selectedAlarm;
 						break;
 					case 1:
@@ -210,10 +223,11 @@ Module.register("MMM-Navigate",{
 					case 3:
 						selectedDay = selectedDay + adjustable_counter;
 						selectedDay = limits(selectedDay, 0, 6);
-
-
+						showAttr = dayStr[selectedDay];
+						break;
+						
 					default:
-						showAttr = 1;
+						showAttr = "no attribute";
 						console.log("DEFAULT:: show attr: " + showAttr + ", selectedID: " + selectedid);
 				};
 
@@ -234,13 +248,13 @@ Module.register("MMM-Navigate",{
 			return selectedid;
 		}
 			
+			
 		function limits(input, min_limit, max_limit) {
 			var input; var min_limit; var max_limit;
 			if(input < min_limit) {input = max_limit;}
 			if(input > max_limit) {input = min_limit;}
 			return input;
 		}
-		
 		
  		return parent
 	},
