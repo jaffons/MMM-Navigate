@@ -8,30 +8,26 @@
 
 */
 
+var locked = false;
+var confirm = 0;
+var selectedAlarm = 0;
+var selectedDay = 0;
 
-// not commited ******************************************************
+class Alarm {
+	constructor(hour, min, days) {
+		this.hour = hour;
+		this.minute = min;
+		this.days = days;
+	}
+}
+
+let alarmIdx = [
+	new Alarm(6,40, [1,2,3,4,5]),
+	new Alarm(4,20, [0,6])
+];
+
 
 Module.register("MMM-Navigate",{
-	
-	var locked = false;
-	var confirm = 0;
-	var selectedAlarm = 0;
-	var selectedDay = 0;
-
-	class Alarm {
-		constructor(hour, min, days) {
-			this.hour = hour;
-			this.minute = min;
-			this.days = days;
-		}
-	}
-
-	let alarmIdx = [
-		new Alarm(6,40, [1,2,3,4,5]),
-		new Alarm(4,20, [0,6])
-	];
-	
-
 	
 	// Default module config.
 	defaults: {
