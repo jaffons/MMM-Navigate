@@ -276,7 +276,7 @@ Module.register("MMM-Navigate",{
 			return input;
 		}
 		
-		resetLock: function(selectedid) {
+		function resetLock(selectedid) {
 			document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
 			locked = false;
 		}
