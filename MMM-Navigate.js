@@ -70,14 +70,8 @@ Module.register("MMM-Navigate",{
 		this.sendConfig();//pass config to node_helper.js
 		//Helper to test connection to node_helper.js
 		//this.sendSocketNotification('START', {message: 'Starte Verbindung node_helper für ' + this.name});
-		setTimeout(function(){ this.hide(10000); }, 6000);
+		setTimeout(function(){ self.hide(10000); }, 6000);
 		
-	},
-	
-	resetLock: function(selectedid) {
-		document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
-		locked = false;
-		return parent;
 	},
 	
 	//Helper, to use module without Rotary Encoder and without GPIO Pins, like developing in Pixel VM
@@ -148,7 +142,7 @@ Module.register("MMM-Navigate",{
 		var selectedid = '';
 		var adjustable_counter = 0;
 		var showAttr = 0;
-		var dayStr = ["su","mo","tu","wd","th","fr","st"];
+		var dayStr = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 		self.show(0);
 		selectedid = fselectedid();
@@ -167,7 +161,7 @@ Module.register("MMM-Navigate",{
 			}
 			else{ //Menu locked so unlock it
 				if(parseInt(selectedid) == 3) { // hardcoded selection 'days' 
-					setTimeout(function(){ resetLock(selectedid); }, 3000);
+					setTimeout(function(){ resetLock(selectedid); }, 15000);
 					// toggle selected day. 
 					if(alarmIdx[selectedAlarm].days[selectedDay] == 9) {
 						alarmIdx[selectedAlarm].days[selectedDay] = selectedDay;
@@ -280,6 +274,11 @@ Module.register("MMM-Navigate",{
 			if(input < min_limit) {input = max_limit;}
 			if(input > max_limit) {input = min_limit;}
 			return input;
+		}
+		
+		resetLock: function(selectedid) {
+			document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
+			locked = false;
 		}
 		
  		return parent
