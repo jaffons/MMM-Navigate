@@ -8,6 +8,8 @@
 
 */
 
+// not commited, changes on lines 70, 76
+
 var locked = false;
 var confirm = 0;
 var selectedAlarm = 0;
@@ -62,13 +64,16 @@ Module.register("MMM-Navigate",{
 	},
 
 	// Define start sequence.
-	start: function() {
+	start: function() {		
 		Log.info("Starting module: " + this.name);
+		
+		var self = this;
+
 		this.sendConfig();//pass config to node_helper.js
 		//Helper to test connection to node_helper.js
 		//this.sendSocketNotification('START', {message: 'Starte Verbindung node_helper für ' + this.name});
 		setInterval(function() {
-			this.resetLocks();
+			self.resetLocks();
 		}, 2000);
 		this.hide(30000);
 	},
