@@ -8,8 +8,6 @@
 
 */
 
-// not commited, changes on lines 70, 76
-
 var locked = false;
 var confirm = 0;
 var selectedAlarm = 0;
@@ -72,14 +70,14 @@ Module.register("MMM-Navigate",{
 		this.sendConfig();//pass config to node_helper.js
 		//Helper to test connection to node_helper.js
 		//this.sendSocketNotification('START', {message: 'Starte Verbindung node_helper für ' + this.name});
-		setInterval(function() {
-			self.resetLocks();
-		}, 2000);
-		this.hide(30000);
+		setTimeout(function(){ this.hide(10000); }, 6000);
+		
 	},
-
-	resetLocks: function() {
+	
+	resetLock: function(selectedid) {
+		document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
 		locked = false;
+		return parent;
 	},
 	
 	//Helper, to use module without Rotary Encoder and without GPIO Pins, like developing in Pixel VM
@@ -160,14 +158,16 @@ Module.register("MMM-Navigate",{
 				if(Array.isArray(self.config.Action[selectedid])){//if selected entry Action is array - lock it
 					locked = true;
 					document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected locked');
+					
 				}
 				else{//if selected entry Action is object - so there is nothing to lock - execute it
-							self.show(0,{force: true}); 
-							self.sendAction(self.config.Action[selectedid]);
+					self.show(0,{force: true}); 
+					self.sendAction(self.config.Action[selectedid]);
 				}
 			}
 			else{ //Menu locked so unlock it
 				if(parseInt(selectedid) == 3) { // hardcoded selection 'days' 
+					setTimeout(function(){ resetLock(selectedid); }, 3000);
 					// toggle selected day. 
 					if(alarmIdx[selectedAlarm].days[selectedDay] == 9) {
 						alarmIdx[selectedAlarm].days[selectedDay] = selectedDay;
