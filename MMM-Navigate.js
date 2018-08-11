@@ -188,10 +188,13 @@ Module.register("MMM-Navigate",{
 					locked = false;
 					document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
 					self.sendAction({
-								{notification: "SET_ALARM", payload: {"hour":String(alarmIdx[selectedAlarm].hour),
-									"minute":String(alarmIdx[selectedAlarm].minute),
-									"days":String(alarmIdx[selectedAlarm].days)",
-									"msg":"alarm set"}};
+								notification: "SET_ALARM", 
+									payload: {
+										"hour":String(alarmIdx[selectedAlarm].hour),
+										"minute":String(alarmIdx[selectedAlarm].minute),
+										"days":String(alarmIdx[selectedAlarm].days)",
+										"msg":"alarm set"}
+								});
 				}
 			}
 		}	 
