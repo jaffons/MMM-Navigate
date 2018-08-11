@@ -192,7 +192,7 @@ Module.register("MMM-Navigate",{
 									payload: {
 										"hour":String(alarmIdx[selectedAlarm].hour),
 										"minute":String(alarmIdx[selectedAlarm].minute),
-										"days":String(alarmIdx[selectedAlarm].days)",
+										"days":String(alarmIdx[selectedAlarm].days),
 										"msg":"alarm set"}
 								});
 				}
