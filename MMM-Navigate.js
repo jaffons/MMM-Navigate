@@ -169,12 +169,26 @@ Module.register("MMM-Navigate",{
 					else { // '9' means that no alarm on that day
 						alarmIdx[selectedAlarm].days[selectedDay] = 9;
 					}
+					
+					var dayStrNotification = '';
+					
+					for(let i=0; i<7; i++) {
+						if(alarmIdx[selectedAlarm].days[i] != 9) {
+							dayStrNotification.push(dayStr[i]);
+						}
+					}
+					self.sendAction({
+								notification:"SHOW_ALERT", 
+								payload:{
+									type:"notification", 
+									message:dayStrNotification}
+								});
+					
 				}
 				else {
 					locked = false;
 					document.getElementsByTagName('li')[selectedid].setAttribute('class', 'selected');
 				}
-//				self.sendAction(self.config.Action[1]);
 			}
 		}	 
 		else if (payload.inputtype === 'CW' || payload.inputtype === 'CCW'){
@@ -232,10 +246,10 @@ Module.register("MMM-Navigate",{
 						break;
 					case 1:
 						alarmIdx[selectedAlarm].hour = alarmIdx[selectedAlarm].hour + adjustable_counter;
-						alarmIdx[selectedAlarm].hour = limits(alarmIdx[selectedAlarm].hour, 0, 23);
+						alarmIdx[selecte  dAlarm].hour = limits(alarmIdx[selectedAlarm].hour, 0, 23);
 						showAttr = alarmIdx[selectedAlarm].hour;
 						break;
-					case 2: 
+					case 2:
 						alarmIdx[selectedAlarm].minute = alarmIdx[selectedAlarm].minute + adjustable_counter;
 						alarmIdx[selectedAlarm].minute = limits(alarmIdx[selectedAlarm].minute, 0, 59);
 						showAttr = alarmIdx[selectedAlarm].minute;
@@ -287,7 +301,7 @@ Module.register("MMM-Navigate",{
 
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
-				console.log(this.name +' received notification: ' + notification);
+			//	console.log(this.name +' received notification: ' + notification);
 				this.naviaction(payload);
 	},
 	
