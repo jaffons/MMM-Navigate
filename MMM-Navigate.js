@@ -184,6 +184,12 @@ Module.register("MMM-Navigate",{
 									message:dayStrNotification}
 								});
 					
+					self.sendAction({
+								{notification: "SET_ALARM", payload: {"hour":String(alarmIdx[selectedAlarm].hour),
+									"minute":String(alarmIdx[selectedAlarm].minute),
+									"days":String(alarmIdx[selectedAlarm].days)",
+									"msg":"alarm set"}};
+					
 				}
 				else {
 					locked = false;
