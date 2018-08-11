@@ -253,7 +253,7 @@ Module.register("MMM-Navigate",{
 						break;
 					case 1:
 						alarmIdx[selectedAlarm].hour = alarmIdx[selectedAlarm].hour + adjustable_counter;
-						alarmIdx[selecte  dAlarm].hour = limits(alarmIdx[selectedAlarm].hour, 0, 23);
+						alarmIdx[selectedAlarm].hour = limits(alarmIdx[selectedAlarm].hour, 0, 23);
 						showAttr = alarmIdx[selectedAlarm].hour;
 						break;
 					case 2:
