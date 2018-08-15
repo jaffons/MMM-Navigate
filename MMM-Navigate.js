@@ -170,7 +170,7 @@ Module.register("MMM-Navigate",{
 						alarmIdx[selectedAlarm].days[selectedDay] = 9;
 					}
 					
-					var dayStrNotification = '';
+					var dayStrNotification = [];
 					
 					for(let i=0; i<7; i++) {
 						if(alarmIdx[selectedAlarm].days[i] != 9) {
@@ -190,9 +190,10 @@ Module.register("MMM-Navigate",{
 					self.sendAction({
 								notification: "SET_ALARM", 
 									payload: {
-										"hour":String(alarmIdx[selectedAlarm].hour),
-										"minute":String(alarmIdx[selectedAlarm].minute),
-										"days":String(alarmIdx[selectedAlarm].days),
+										"selectedAlarm": selectedAlarm,
+										"hour": alarmIdx[selectedAlarm].hour,
+										"minute": alarmIdx[selectedAlarm].minute,
+										"days": alarmIdx[selectedAlarm].days,
 										"msg":"alarm set"}
 								});
 				}
